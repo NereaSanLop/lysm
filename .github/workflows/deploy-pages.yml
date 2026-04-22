@@ -31,19 +31,14 @@ jobs:
       - name: Build secret phrases file
         env:
           HOMEPAGE_PHRASES_JSON: ${{ secrets.HOMEPAGE_PHRASES_JSON }}
-          HOMEPAGE_PHRASES: ${{ secrets.HOMEPAGE_PHRASES }}
         run: |
           node <<'NODE'
           const fs = require('fs');
 
           const rawJson = (process.env.HOMEPAGE_PHRASES_JSON || '').trim();
-          const rawLines = (process.env.HOMEPAGE_PHRASES || '').trim();
-
-          console.log('HOMEPAGE_PHRASES_JSON present:', Boolean(rawJson));
-          console.log('HOMEPAGE_PHRASES present:', Boolean(rawLines));
 
           let phrases = [];
-          const raw = rawJson || rawLines;
+          const raw = rawJson;
 
           if (raw) {
             try {
@@ -65,9 +60,6 @@ jobs:
             console.error('HOMEPAGE_PHRASES must resolve to an array of strings.');
             process.exit(1);
           }
-
-          console.log('Parsed phrases count:', phrases.length);
-          console.log('Parsed phrases:', JSON.stringify(phrases));
 
           fs.writeFileSync(
             'js/phrases-secrets.js',
