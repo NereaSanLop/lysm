@@ -41,5 +41,5 @@ form.addEventListener('submit', function (event) {
   message.textContent = `Hola, ${username}. Sesión iniciada.`;
   message.style.color = '#166534';
   sessionStorage.setItem('lysm_login_ok', '1');
-  window.location.href = 'homepage.html';
+  window.location.href = 'html/homepage.html';
 });

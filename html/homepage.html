@@ -5,51 +5,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Homepage</title>
 	<link rel="stylesheet" href="../css/style.css">
-	<style>
-		body {
-			background-image: url('../img/background.gif');
-			background-size: cover;
-			background-position: center;
-			background-repeat: no-repeat;
-		}
-
-		.corner-gif {
-			position: fixed;
-			right: 16px;
-			bottom: 16px;
-			width: clamp(90px, 18vw, 160px);
-			height: auto;
-			pointer-events: none;
-		}
-
-		.playlist-panel {
-			width: min(68vw, 480px);
-			margin-top: 12px;
-			padding: 8px;
-			border-radius: 12px;
-			background: rgba(255, 255, 255, 0.88);
-			box-shadow: 0 8px 20px rgba(0, 0, 0, 0.10);
-			backdrop-filter: blur(6px);
-		}
-
-		.playlist-frame {
-			width: 100%;
-			aspect-ratio: 16 / 9;
-			border: 0;
-			border-radius: 8px;
-			display: block;
-		}
-	</style>
+	<link rel="stylesheet" href="../css/homepage.css">
 </head>
 <body>
-	<script>
-		if (sessionStorage.getItem('lysm_login_ok') !== '1') {
-			window.location.replace('index.html');
-		}
-	</script>
-	<script>
-		const YOUTUBE_PLAYLIST_ID = 'RDEM9-GaHcaopNoPYSd_W4Of6g';
-	</script>
 	<div class="typing-box" aria-live="polite">
 		<p id="typedText" class="typed-text"></p>
 	</div>
@@ -65,63 +23,6 @@
 	</div>
 	<img class="corner-gif" src="../img/cinamonroll.gif" alt="Cinnamoroll animado">
 	<script src="../js/phrases-secrets.js"></script>
-
-	<script>
-		const playlistPanel = document.getElementById('playlistPanel');
-		const playlistFrame = document.getElementById('playlistFrame');
-
-		if (YOUTUBE_PLAYLIST_ID) {
-			playlistFrame.src = `https://www.youtube.com/embed/videoseries?list=${encodeURIComponent(YOUTUBE_PLAYLIST_ID)}`;
-			playlistPanel.hidden = false;
-		}
-
-		const FRASES = Array.isArray(window.HOMEPAGE_PHRASES) && window.HOMEPAGE_PHRASES.length > 0
-			? window.HOMEPAGE_PHRASES
-			: ['Frases no configuradas.'];
-
-		const typedText = document.getElementById('typedText');
-		let fraseIndex = 0;
-		let charIndex = 0;
-		let borrando = false;
-
-		const velocidadEscritura = 85;
-		const velocidadBorrado = 45;
-		const pausaAlFinal = 1400;
-		const pausaAntesDeEscribir = 300;
-
-		function animarTexto() {
-			const frase = FRASES[fraseIndex];
-
-			if (!borrando) {
-				typedText.textContent = frase.slice(0, charIndex + 1);
-				charIndex += 1;
-
-				if (charIndex === frase.length) {
-					borrando = true;
-					setTimeout(animarTexto, pausaAlFinal);
-					return;
-				}
-
-				setTimeout(animarTexto, velocidadEscritura);
-				return;
-			}
-
-			typedText.textContent = frase.slice(0, charIndex - 1);
-			charIndex -= 1;
-
-			if (charIndex === 0) {
-				borrando = false;
-				fraseIndex = (fraseIndex + 1) % FRASES.length;
-				setTimeout(animarTexto, pausaAntesDeEscribir);
-				return;
-			}
-
-			setTimeout(animarTexto, velocidadBorrado);
-		}
-
-		if (FRASES.length > 0) {
-			animarTexto();
-		}
-	</script>
+	<script src="../js/homepage.js"></script>
 </body>
 </html>
