@@ -1,0 +1,1 @@
+window.HOMEPAGE_PHRASES = [];
