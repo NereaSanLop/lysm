@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Homepage</title>
+	<link rel="stylesheet" href="../css/style.css">
+	<style>
+		body {
+			background-image: url('../img/background.gif');
+			background-size: cover;
+			background-position: center;
+			background-repeat: no-repeat;
+		}
+
+		.corner-gif {
+			position: fixed;
+			right: 16px;
+			bottom: 16px;
+			width: clamp(90px, 18vw, 160px);
+			height: auto;
+			pointer-events: none;
+		}
+	</style>
+</head>
+<body>
+	<script>
+		if (sessionStorage.getItem('lysm_login_ok') !== '1') {
+			window.location.replace('index.html');
+		}
+	</script>
+	<div class="typing-box" aria-live="polite">
+		<p id="typedText" class="typed-text"></p>
+	</div>
+	<img class="corner-gif" src="../img/cinamonroll.gif" alt="Cinnamoroll animado">
+	<script src="../js/phrases-secrets.js"></script>
+
+	<script>
+		const FRASES = Array.isArray(window.HOMEPAGE_PHRASES) && window.HOMEPAGE_PHRASES.length > 0
+			? window.HOMEPAGE_PHRASES
+			: ['Frases no configuradas.'];
+
+		const typedText = document.getElementById('typedText');
+		let fraseIndex = 0;
+		let charIndex = 0;
+		let borrando = false;
+
+		const velocidadEscritura = 85;
+		const velocidadBorrado = 45;
+		const pausaAlFinal = 1400;
+		const pausaAntesDeEscribir = 300;
+
+		function animarTexto() {
+			const frase = FRASES[fraseIndex];
+
+			if (!borrando) {
+				typedText.textContent = frase.slice(0, charIndex + 1);
+				charIndex += 1;
+
+				if (charIndex === frase.length) {
+					borrando = true;
+					setTimeout(animarTexto, pausaAlFinal);
+					return;
+				}
+
+				setTimeout(animarTexto, velocidadEscritura);
+				return;
+			}
+
+			typedText.textContent = frase.slice(0, charIndex - 1);
+			charIndex -= 1;
+
+			if (charIndex === 0) {
+				borrando = false;
+				fraseIndex = (fraseIndex + 1) % FRASES.length;
+				setTimeout(animarTexto, pausaAntesDeEscribir);
+				return;
+			}
+
+			setTimeout(animarTexto, velocidadBorrado);
+		}
+
+		if (FRASES.length > 0) {
+			animarTexto();
+		}
+	</script>
+</body>
+</html>

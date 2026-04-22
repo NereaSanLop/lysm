@@ -83,3 +83,53 @@ button:hover {
   font-size: 0.95rem;
   font-weight: 700;
 }
+
+.typing-box {
+  width: min(84vw, 760px);
+  min-height: 160px;
+  padding: 26px 30px;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.14);
+  display: grid;
+  align-items: center;
+}
+
+.typed-text {
+  margin: 0;
+  font-size: clamp(1.2rem, 2vw, 1.9rem);
+  line-height: 1.35;
+  color: #111827;
+  font-weight: 700;
+}
+
+.typed-text::after {
+  content: '';
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  margin-left: 6px;
+  vertical-align: text-bottom;
+  background: #111827;
+  animation: blink-caret 0.8s steps(1) infinite;
+}
+
+@keyframes blink-caret {
+  0%,
+  49% {
+    opacity: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .typing-box {
+    min-height: 130px;
+    padding: 20px;
+  }
+}
