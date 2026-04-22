@@ -21,6 +21,24 @@
 			height: auto;
 			pointer-events: none;
 		}
+
+		.playlist-panel {
+			width: min(68vw, 480px);
+			margin-top: 12px;
+			padding: 8px;
+			border-radius: 12px;
+			background: rgba(255, 255, 255, 0.88);
+			box-shadow: 0 8px 20px rgba(0, 0, 0, 0.10);
+			backdrop-filter: blur(6px);
+		}
+
+		.playlist-frame {
+			width: 100%;
+			aspect-ratio: 16 / 9;
+			border: 0;
+			border-radius: 8px;
+			display: block;
+		}
 	</style>
 </head>
 <body>
@@ -29,13 +47,34 @@
 			window.location.replace('index.html');
 		}
 	</script>
+	<script>
+		const YOUTUBE_PLAYLIST_ID = 'RDEM9-GaHcaopNoPYSd_W4Of6g';
+	</script>
 	<div class="typing-box" aria-live="polite">
 		<p id="typedText" class="typed-text"></p>
+	</div>
+	<div id="playlistPanel" class="playlist-panel" hidden>
+		<iframe
+			id="playlistFrame"
+			class="playlist-frame"
+			title="Reproductor de playlist de YouTube"
+			loading="lazy"
+			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+			allowfullscreen>
+		</iframe>
 	</div>
 	<img class="corner-gif" src="../img/cinamonroll.gif" alt="Cinnamoroll animado">
 	<script src="../js/phrases-secrets.js"></script>
 
 	<script>
+		const playlistPanel = document.getElementById('playlistPanel');
+		const playlistFrame = document.getElementById('playlistFrame');
+
+		if (YOUTUBE_PLAYLIST_ID) {
+			playlistFrame.src = `https://www.youtube.com/embed/videoseries?list=${encodeURIComponent(YOUTUBE_PLAYLIST_ID)}`;
+			playlistPanel.hidden = false;
+		}
+
 		const FRASES = Array.isArray(window.HOMEPAGE_PHRASES) && window.HOMEPAGE_PHRASES.length > 0
 			? window.HOMEPAGE_PHRASES
 			: ['Frases no configuradas.'];
