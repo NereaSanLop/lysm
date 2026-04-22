@@ -13,6 +13,8 @@ Para que las frases no aparezcan en el repo pero si se vean en la web desplegada
 ["Hola mi amor", "Esta frase viene de un secret", "No esta en el repo publico"]
 ```
 
+   Si prefieres, tambien puedes crear `HOMEPAGE_PHRASES` y poner una frase por linea.
+
 3. En `Settings > Pages`, selecciona `Source: GitHub Actions`.
 4. Haz push a `main` para desplegar.
 

@@ -31,12 +31,43 @@ jobs:
       - name: Build secret phrases file
         env:
           HOMEPAGE_PHRASES_JSON: ${{ secrets.HOMEPAGE_PHRASES_JSON }}
+          HOMEPAGE_PHRASES: ${{ secrets.HOMEPAGE_PHRASES }}
         run: |
-          if [ -z "$HOMEPAGE_PHRASES_JSON" ]; then
-            echo "window.HOMEPAGE_PHRASES = [];" > js/phrases-secrets.js
-          else
-            printf 'window.HOMEPAGE_PHRASES = %s;\n' "$HOMEPAGE_PHRASES_JSON" > js/phrases-secrets.js
-          fi
+          node <<'NODE'
+          const fs = require('fs');
+
+          const rawJson = (process.env.HOMEPAGE_PHRASES_JSON || '').trim();
+          const rawLines = (process.env.HOMEPAGE_PHRASES || '').trim();
+
+          let phrases = [];
+          const raw = rawJson || rawLines;
+
+          if (raw) {
+            try {
+              if (raw.startsWith('[')) {
+                phrases = JSON.parse(raw);
+              } else {
+                phrases = raw
+                  .split(/\r?\n/)
+                  .map((line) => line.trim())
+                  .filter(Boolean);
+              }
+            } catch (error) {
+              console.error('HOMEPAGE_PHRASES secret is invalid:', error.message);
+              process.exit(1);
+            }
+          }
+
+          if (!Array.isArray(phrases)) {
+            console.error('HOMEPAGE_PHRASES must resolve to an array of strings.');
+            process.exit(1);
+          }
+
+          fs.writeFileSync(
+            'js/phrases-secrets.js',
+            `window.HOMEPAGE_PHRASES = ${JSON.stringify(phrases)};\n`
+          );
+          NODE
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -46,3 +77,6 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Show deployed URL
+        run: echo "Deployed site: https://nereasanlop.github.io/lysm/"
