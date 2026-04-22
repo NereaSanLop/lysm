@@ -39,6 +39,9 @@ jobs:
           const rawJson = (process.env.HOMEPAGE_PHRASES_JSON || '').trim();
           const rawLines = (process.env.HOMEPAGE_PHRASES || '').trim();
 
+          console.log('HOMEPAGE_PHRASES_JSON present:', Boolean(rawJson));
+          console.log('HOMEPAGE_PHRASES present:', Boolean(rawLines));
+
           let phrases = [];
           const raw = rawJson || rawLines;
 
@@ -63,6 +66,9 @@ jobs:
             process.exit(1);
           }
 
+          console.log('Parsed phrases count:', phrases.length);
+          console.log('Parsed phrases:', JSON.stringify(phrases));
+
           fs.writeFileSync(
             'js/phrases-secrets.js',
             `window.HOMEPAGE_PHRASES = ${JSON.stringify(phrases)};\n`
@@ -79,4 +85,5 @@ jobs:
         uses: actions/deploy-pages@v4
 
       - name: Show deployed URL
-        run: echo "Deployed site: https://nereasanlop.github.io/lysm/"
+        run: |
+          echo "Deployed site: https://nereasanlop.github.io/lysm/"
